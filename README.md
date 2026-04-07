@@ -20,6 +20,32 @@ Bepors (`@Bepors_iraneman_bot` on Telegram) answers any question in any language
 
 ---
 
+## 🚀 Quick install (one line)
+
+On a fresh Ubuntu/Debian server, SSH in as root and paste:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/MohammadShamchi/bepors-bot/main/install.sh | bash
+```
+
+(If you're not root, prefix with `sudo`: `... | sudo bash`.)
+
+The installer will:
+
+1. Install Python, set up a hardened systemd service running as a locked-down `bepors` user
+2. Configure UFW (SSH only inbound), daily SQLite backups (14-day retention), unattended security upgrades
+3. Open an interactive **TUI prompt** asking you for:
+   - Your **Telegram bot token** — from [@BotFather](https://t.me/BotFather) (validated live via `getMe`)
+   - Your **Telegram user ID** for admin access — optional, from [@userinfobot](https://t.me/userinfobot)
+   - Your **Gemini API key** — free from [Google AI Studio](https://aistudio.google.com/api-keys)
+4. Start the bot and confirm it's reachable
+
+Total time: **~2 minutes** on a fresh Hetzner CX22.
+
+Safe to re-run — pulls latest from `main`, pre-fills credential prompts with your current values. Useful as a "reconfigure" tool too.
+
+---
+
 ## ✨ Features
 
 ### For users
@@ -118,9 +144,9 @@ curl 127.0.0.1:8088/health
 
 ---
 
-## 🚀 Deploy to a fresh Linux server
+## 🛠 Manual install (without the one-liner)
 
-Tested on Ubuntu 24.04 (Hetzner CX23). Works on any Debian/Ubuntu box with `systemd`.
+Tested on Ubuntu 24.04 (Hetzner CX23). Works on any Debian/Ubuntu box with `systemd`. Use this path if you want to audit `deploy.sh` line-by-line, or you've already cloned the repo locally and want to push it via `scp` instead of letting the installer pull from GitHub.
 
 From your **local machine**:
 
