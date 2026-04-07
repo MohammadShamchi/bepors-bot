@@ -1,0 +1,37 @@
+# --- secrets / runtime state (NEVER commit) ---
+.env
+.env.local
+.env.*.local
+.log_salt
+*.db
+*.db-wal
+*.db-shm
+
+# --- Python build / cache ---
+*.pyc
+*.pyo
+__pycache__/
+.venv/
+venv/
+.eggs/
+*.egg-info/
+build/
+dist/
+
+# --- runtime data dir (keep the placeholder so the dir survives) ---
+# Use `data/*` not `data/` so git can descend into the dir and honor the negation.
+data/*
+!data/.keep
+
+# --- tooling cache ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- editor / OS / agents ---
+.DS_Store
+.idea/
+.vscode/
+.claude/
+*.swp
+*~

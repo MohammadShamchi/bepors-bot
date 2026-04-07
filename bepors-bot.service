@@ -1,0 +1,38 @@
+[Unit]
+Description=Bepors Telegram Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bepors
+Group=bepors
+WorkingDirectory=/opt/bepors-bot
+EnvironmentFile=/opt/bepors-bot/.env
+ExecStart=/opt/bepors-bot/venv/bin/python /opt/bepors-bot/bot.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Hardening per PRD §5.10
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectClock=true
+RestrictNamespaces=true
+RestrictRealtime=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+ReadWritePaths=/opt/bepors-bot/data
+RestrictAddressFamilies=AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

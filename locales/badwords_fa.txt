@@ -1,0 +1,8 @@
+# Persian badwords list - one per line, # for comments
+# Keep this list short and non-political. Used only to censor outgoing text.
+کیری
+کونی
+کسکش
+جاکش
+جنده
+کصخل

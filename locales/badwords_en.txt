@@ -1,0 +1,8 @@
+# English badwords list - one per line, # for comments
+# Keep this minimal and non-political. Used only to censor outgoing text.
+fuck
+shit
+bitch
+asshole
+cunt
+dick
