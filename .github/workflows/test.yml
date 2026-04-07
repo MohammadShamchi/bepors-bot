@@ -32,6 +32,9 @@ jobs:
       - name: Syntax check
         run: python -m py_compile bot.py ai.py db.py i18n.py filters.py formatting.py ratelimit.py admin.py health.py
 
+      - name: Shell syntax check
+        run: bash -n install.sh deploy.sh scripts/backup.sh scripts/update.sh
+
       - name: Run pytest
         env:
           TELEGRAM_TOKEN: test:fake

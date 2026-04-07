@@ -6,10 +6,18 @@ set -euo pipefail
 APP_DIR=/opt/bepors-bot
 APP_USER=bepors
 
+run_as_app_user() {
+  if command -v runuser >/dev/null 2>&1; then
+    runuser -u "${APP_USER}" -- "$@"
+  else
+    su -s /bin/bash "${APP_USER}" -c "$(printf '%q ' "$@")"
+  fi
+}
+
 echo "==> Installing system packages..."
 apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  python3 python3-venv python3-pip ufw unattended-upgrades
+  python3 python3-venv python3-pip sqlite3 ufw unattended-upgrades
 
 echo "==> Creating service user '${APP_USER}' (if missing)..."
 if ! id "${APP_USER}" >/dev/null 2>&1; then
@@ -23,10 +31,10 @@ chmod 750 "${APP_DIR}"
 
 echo "==> Creating virtualenv..."
 if [ ! -d "${APP_DIR}/venv" ]; then
-  sudo -u "${APP_USER}" python3 -m venv "${APP_DIR}/venv"
+  run_as_app_user python3 -m venv "${APP_DIR}/venv"
 fi
-sudo -u "${APP_USER}" "${APP_DIR}/venv/bin/pip" install --upgrade pip
-sudo -u "${APP_USER}" "${APP_DIR}/venv/bin/pip" install -r "${APP_DIR}/requirements.txt"
+run_as_app_user "${APP_DIR}/venv/bin/pip" install --upgrade pip
+run_as_app_user "${APP_DIR}/venv/bin/pip" install -r "${APP_DIR}/requirements.txt"
 
 echo "==> Setting up .env (edit it if you need to change keys)..."
 if [ ! -f "${APP_DIR}/.env" ]; then

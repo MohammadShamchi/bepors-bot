@@ -90,7 +90,10 @@ class Admin:
             except BadRequest:
                 failed += 1
             except Exception:
-                log.exception("broadcast to %s failed", uid)
+                log.exception(
+                    "broadcast delivery failed",
+                    extra={"data": {"event": "broadcast_delivery_failed"}},
+                )
                 failed += 1
             await asyncio.sleep(interval)
 

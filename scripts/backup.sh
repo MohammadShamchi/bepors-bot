@@ -9,6 +9,11 @@ DB="${APP_DIR}/data/bepors.db"
 
 mkdir -p "${BACKUP_DIR}"
 
+if ! command -v sqlite3 >/dev/null 2>&1; then
+  echo "[backup] sqlite3 not installed"
+  exit 1
+fi
+
 if [ ! -f "${DB}" ]; then
   echo "[backup] db not found: ${DB}"
   exit 0

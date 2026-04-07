@@ -298,7 +298,11 @@ async def _record_error_and_maybe_alert(bot) -> None:
         try:
             await bot.send_message(chat_id=admin_id, text=msg)
         except Exception:
-            log.debug("admin alert send failed for %s", admin_id, exc_info=True)
+            log.debug(
+                "admin alert send failed",
+                exc_info=True,
+                extra={"data": {"event": "admin_alert_send_failed"}},
+            )
 
 
 # ---- command handlers -------------------------------------------------------
@@ -922,7 +926,11 @@ async def _post_init(app: Application) -> None:
                     scope=BotCommandScopeChat(chat_id=admin_id),
                 )
             except Exception:
-                log.warning("admin menu set failed for %s", admin_id, exc_info=True)
+                log.warning(
+                    "admin menu set failed",
+                    exc_info=True,
+                    extra={"data": {"event": "admin_menu_set_failed"}},
+                )
 
         # Bot description (shown on the bot's profile in Telegram clients).
         await app.bot.set_my_short_description(t("bot_short_desc", "fa"))
