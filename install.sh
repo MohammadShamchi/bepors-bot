@@ -51,14 +51,35 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
     git curl ca-certificates whiptail >/dev/null
 
 # ---- clone or update ------------------------------------------------------
+#
+# Three cases:
+#   1. /opt/bepors-bot does not exist                    → fresh clone
+#   2. /opt/bepors-bot exists and IS a git repo          → fetch + reset --hard
+#   3. /opt/bepors-bot exists but NOT a git repo (e.g.   → convert in place via
+#      pushed via scp/rsync from a previous deploy)        git init + fetch +
+#                                                          reset --hard
+#
+# Case 3 is critical: if we did `rm -rf` first we'd nuke runtime data
+# (data/bepors.db, data/.log_salt, .env). Instead we convert the dir to a git
+# checkout in place. Untracked files (data/, .env) stay because they're listed
+# in .gitignore so `git reset --hard` won't touch them.
 
 if [[ -d "$INSTALL_DIR/.git" ]]; then
-    echo "==> Existing install detected — pulling latest from origin/main..."
+    echo "==> Existing git install detected — pulling latest from origin/main..."
     git -C "$INSTALL_DIR" fetch --quiet origin main
     git -C "$INSTALL_DIR" reset --hard --quiet origin/main
+elif [[ -d "$INSTALL_DIR" ]]; then
+    echo "==> Existing non-git install detected — converting to git checkout in place..."
+    cd "$INSTALL_DIR"
+    git init -q -b main
+    git remote remove origin 2>/dev/null || true
+    git remote add origin "$REPO_URL"
+    git fetch --quiet --depth 1 origin main
+    # `reset --hard` overwrites tracked files but leaves untracked (data/, .env, db files) alone.
+    git reset --hard --quiet origin/main
+    cd - >/dev/null
 else
     echo "==> Cloning repo into $INSTALL_DIR..."
-    rm -rf "$INSTALL_DIR"
     git clone --depth 1 --quiet "$REPO_URL" "$INSTALL_DIR"
 fi
 
