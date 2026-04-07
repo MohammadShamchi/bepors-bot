@@ -63,6 +63,15 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
 # (data/bepors.db, data/.log_salt, .env). Instead we convert the dir to a git
 # checkout in place. Untracked files (data/, .env) stay because they're listed
 # in .gitignore so `git reset --hard` won't touch them.
+#
+# In both case 2 and case 3 the directory may be owned by the `bepors` service
+# user (set up by a previous deploy.sh run) while we're running as root, which
+# triggers git's CVE-2022-24765 "dubious ownership" check. We add a safe.directory
+# exception so git will operate on it.
+
+if [[ -d "$INSTALL_DIR" ]]; then
+    git config --global --add safe.directory "$INSTALL_DIR"
+fi
 
 if [[ -d "$INSTALL_DIR/.git" ]]; then
     echo "==> Existing git install detected — pulling latest from origin/main..."
