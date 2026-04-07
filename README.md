@@ -7,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Deploy](https://img.shields.io/badge/deploy-systemd-orange)](deploy.sh)
 
+**🇮🇷 فارسی‌زبان هستی؟ [راهنمای کامل فارسی](docs/HELP_FA.md) رو ببین.**
+
 Bepors (`@Bepors_iraneman_bot` on Telegram) answers any question in any language using **Gemini 2.5 Flash** with built-in **Google Search grounding**, returning live data with tappable source citations. Designed for Persian-speaking users who face heavy internet filtering, but works for everyone.
 
 ```
